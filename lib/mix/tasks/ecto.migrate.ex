@@ -86,7 +86,8 @@ defmodule Mix.Tasks.Ecto.Migrate do
   end
 
   defp migrated_versions do
-    migrated_versions_path()
+    File.cwd!()
+    |> Path.join("priv/repo/migrations")
     |> File.stream!()
     |> Enum.map(&Integer.parse/1)
     |> Enum.map(fn {timestamp, _} -> timestamp end)
