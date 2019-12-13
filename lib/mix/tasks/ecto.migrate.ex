@@ -44,8 +44,7 @@ defmodule Mix.Tasks.Ecto.Migrate do
     |> Enum.each(fn file_path ->
       case apply(migration_module(file_path), :up, []) do
         :ok ->
-          File.cwd!()
-          |> Path.join("lib/mix/tasks/.migrated_versions")
+          migrated_versions_path()
           |> File.write!("#{timestamp(file_path)}\n", [:append])
 
           Mix.shell().info("Successfully Migrated #{file_path}")
@@ -66,8 +65,7 @@ defmodule Mix.Tasks.Ecto.Migrate do
 
     case apply(module, :down, []) do
       :ok ->
-        File.cwd!()
-        |> Path.join("lib/mix/tasks/.migrated_versions")
+        migrated_versions()
         |> File.write!(Enum.join(versions, "\n"), [:write])
 
         Mix.shell().info("Successfully Rolled Back #{last_migrated_version}")
@@ -88,8 +86,7 @@ defmodule Mix.Tasks.Ecto.Migrate do
   end
 
   defp migrated_versions do
-    File.cwd!()
-    |> Path.join("lib/mix/tasks/.migrated_versions")
+    migrated_versions_path()
     |> File.stream!()
     |> Enum.map(&Integer.parse/1)
     |> Enum.map(fn {timestamp, _} -> timestamp end)
@@ -131,5 +128,15 @@ defmodule Mix.Tasks.Ecto.Migrate do
     |> Path.join("priv/repo/migrations")
     |> File.ls!()
     |> Enum.find(&String.starts_with?(&1, version))
+  end
+
+  defp migrated_versions_path do
+    path =
+      File.cwd!()
+      |> Path.join("priv/repo/migrations/.migrated_versions")
+
+    unless File.exists?(path), do: File.touch(path)
+
+    path
   end
 end
