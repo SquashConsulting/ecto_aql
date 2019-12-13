@@ -42,7 +42,7 @@ defmodule Mix.Tasks.Arango.Gen.Migration do
     Enum.map(repos, fn repo ->
       case OptionParser.parse!(args, strict: @switches, aliases: @aliases) do
         {_, [name]} ->
-          path = Path.join(priv_repo_path(), "migrations")
+          path = Path.join(priv_repo_path(repo), "migrations")
           base_name = "#{underscore(name)}.exs"
           file = Path.join(path, "#{timestamp()}_#{base_name}")
 

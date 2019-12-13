@@ -1,6 +1,4 @@
 defmodule EctoAQL.Repo do
-  @otp_app :arango_phx
-
   @doc false
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do

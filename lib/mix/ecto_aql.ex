@@ -1,8 +1,8 @@
 defmodule Mix.EctoAQL do
   @moduledoc false
 
-  def priv_repo_path do
-    app = Keyword.fetch!(ArangoPhx.Repo.config(), :otp_app)
+  def priv_repo_path(repo) do
+    app = Keyword.fetch!(repo.config(), :otp_app)
     Path.join(Mix.Project.deps_paths()[app] || File.cwd!(), "priv/repo")
   end
 
