@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Arango.Gen.Migration do
+defmodule Mix.Tasks.EctoAQL.Gen.Migration do
   use Mix.Task
 
   import Mix.Ecto
@@ -37,6 +37,7 @@ defmodule Mix.Tasks.Arango.Gen.Migration do
 
   @impl true
   def run(args) do
+    Mix.Task.run("app.start")
     repos = parse_repo(args)
 
     Enum.map(repos, fn repo ->

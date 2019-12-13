@@ -2,7 +2,6 @@ defmodule EctoAQL.Repo do
   @doc false
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
-      @behaviour EctoAQL.Repo
       @otp_app opts[:otp_app]
 
       def child_spec(opts \\ []) do
