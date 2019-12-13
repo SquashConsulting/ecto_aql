@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.EctoAQL.Gen.Migration do
+defmodule Mix.Tasks.EctoAql.Gen.Migration do
   use Mix.Task
 
   import Mix.Ecto
