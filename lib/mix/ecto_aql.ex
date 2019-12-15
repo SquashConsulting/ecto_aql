@@ -13,4 +13,14 @@ defmodule Mix.EctoAQL do
 
   def pad(i) when i < 10, do: <<?0, ?0 + i>>
   def pad(i), do: to_string(i)
+
+  def system_db do
+    options = [
+      pool_size: 1,
+      database: "_system",
+      endpoints: "http://localhost:8529"
+    ]
+
+    Arangox.start_link(options)
+  end
 end
