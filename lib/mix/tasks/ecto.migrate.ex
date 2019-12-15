@@ -17,6 +17,16 @@ defmodule Mix.Tasks.Ecto.Migrate do
   def run(args) do
     Mix.Task.run("app.start")
 
+    case migrated_versions() do
+      [nil] ->
+        Mix.raise("Arango is not set up. Please run `mix ecto.setup.arango` to proceed")
+
+      _ ->
+        migrate(args)
+    end
+  end
+
+  defp migrate(args) do
     case OptionParser.parse!(args, aliases: @aliases, strict: @switches) do
       {[], []} ->
         up()
