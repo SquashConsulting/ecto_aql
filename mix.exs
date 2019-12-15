@@ -59,19 +59,7 @@ defmodule EctoAql.MixProject do
       main: "Ecto.AQL",
       source_ref: "v#{@version}",
       canonical: "http://hexdocs.pm/ecto_aql",
-      source_url: "https://github.com/rasjonell/ecto_aql",
-      groups_for_modules: [
-        "Adapter specification": [
-          Ecto.Adapter.Migration,
-          Ecto.Adapter.Structure,
-          Ecto.Adapters.SQL.Connection,
-          Ecto.Migration.Command,
-          Ecto.Migration.Constraint,
-          Ecto.Migration.Index,
-          Ecto.Migration.Reference,
-          Ecto.Migration.Table
-        ]
-      ]
+      source_url: "https://github.com/rasjonell/ecto_aql"
     ]
   end
 end

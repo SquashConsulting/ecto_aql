@@ -1,5 +1,6 @@
 defmodule EctoAQL.Repo do
   @doc false
+
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
       @otp_app opts[:otp_app]
@@ -153,6 +154,16 @@ defmodule EctoAQL.Repo do
         end
       end
 
+      def system_db do
+        options = [
+          pool_size: 1,
+          database: "_system",
+          endpoints: "http://localhost:8529"
+        ]
+
+        Arangox.start_link(options)
+      end
+
       defp document_changes(struct) do
         struct
         |> Map.from_struct()
@@ -164,16 +175,6 @@ defmodule EctoAQL.Repo do
 
       defp collection_type(:document), do: 2
       defp collection_type(:edge), do: 3
-
-      defp system_db do
-        options = [
-          pool_size: 1,
-          database: "_system",
-          endpoints: "http://localhost:8529"
-        ]
-
-        Arangox.start_link(options)
-      end
     end
   end
 end
