@@ -34,7 +34,7 @@ defmodule Mix.EctoAQL do
       Arangox.post(
         conn,
         "/_api/document/_migrations",
-        %{"_key" => "MASTER", "migrations" => []}
+        %{_key: "MASTER", migrations: []}
       )
   end
 
@@ -49,19 +49,22 @@ defmodule Mix.EctoAQL do
     versions
   end
 
+  def update_versions(version) when is_binary(version),
+    do: update_versions(String.to_integer(version))
+
   def update_versions(version) do
     {:ok, conn} = system_db()
 
-    {:ok, versions} =
-      query(conn, """
-        let master = DOCUMENT("_migrations/MASTER")
-        let updatedMigration = CONCAT(master.migrations, #{version})
+    new_versions = [version | migrated_versions()]
 
-        UPDATE master WITH { migrations: updatedMigrations } IN _migrations
-        RETURN NEW.migrations
-      """)
+    {:ok, _, _} =
+      Arangox.patch(
+        conn,
+        "/_api/document/_migrations/MASTER",
+        %{migrations: new_versions}
+      )
 
-    versions
+    new_versions
   end
 
   defp query(conn, query_string) do
