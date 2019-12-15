@@ -1,7 +1,5 @@
 defmodule Mix.Tasks.Ecto.Setup do
   use Mix.Task
-
-  import Mix.Ecto
   import Mix.EctoAQL, only: [system_db: 0]
 
   @shortdoc "Sets up all necessary collections in _systems db for migrations "
@@ -12,8 +10,7 @@ defmodule Mix.Tasks.Ecto.Setup do
 
     {:ok, conn} = system_db()
 
-    case Arangox.create_collection(conn, "/_api/collection", %{
-           # collection
+    case Arangox.post(conn, "/_api/collection", %{
            type: 2,
            name: "Locations"
          }) do
