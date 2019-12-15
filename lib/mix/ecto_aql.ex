@@ -19,7 +19,8 @@ defmodule Mix.EctoAQL do
 
     case Arangox.post(conn, "/_api/collection", %{
            type: 2,
-           name: "migrations"
+           isSystem: true,
+           name: "_migrations"
          }) do
       {:ok, _, _} -> :ok
       {:error, %{status: status}} -> {:error, status}
@@ -29,12 +30,12 @@ defmodule Mix.EctoAQL do
   def create_master_document do
     {:ok, conn} = system_db()
 
-    {:ok, _} =
-      query(conn, """
-        INSERT {
-          _key: "MASTER", migrations: []
-        } INTO migrations
-      """)
+    {:ok, _, _} =
+      Arangox.post(
+        conn,
+        "/_api/document/_migrations",
+        %{"_key" => "MASTER", "migrations" => []}
+      )
   end
 
   def migrated_versions do
@@ -42,7 +43,7 @@ defmodule Mix.EctoAQL do
 
     {:ok, versions} =
       query(conn, """
-        RETURN DOCUMENT("migrations/MASTER").migrations
+        RETURN DOCUMENT("_migrations/MASTER").migrations
       """)
 
     versions
@@ -53,10 +54,10 @@ defmodule Mix.EctoAQL do
 
     {:ok, versions} =
       query(conn, """
-        let master = DOCUMENT("migrations/MASTER")
+        let master = DOCUMENT("_migrations/MASTER")
         let updatedMigration = CONCAT(master.migrations, #{version})
 
-        UPDATE master WITH { migrations: updatedMigrations } IN migrations
+        UPDATE master WITH { migrations: updatedMigrations } IN _migrations
         RETURN NEW.migrations
       """)
 
