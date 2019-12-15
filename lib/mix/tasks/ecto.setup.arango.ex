@@ -12,10 +12,11 @@ defmodule Mix.Tasks.Ecto.Setup.Arango do
 
     case Arangox.post(conn, "/_api/collection", %{
            type: 2,
-           name: "Locations"
+           name: "migrations"
          }) do
       {:ok, _, _} -> Mix.shell().info("Setup Complete!")
-      {:error, error} -> Mix.shell().error("ERROR: #{inspect(error)}")
+      {:error, %{status: 409}} -> Mix.shell().info("Looks like you're already all set up!")
+      {:error, error} -> Mix.shell().error("Something is not right 🤔, #{inspect(error)}")
     end
   end
 end
