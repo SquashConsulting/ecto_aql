@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Ecto.Setup.Arango do
     Mix.Task.run("app.start")
 
     case create_migrations() do
-      {:ok, _, _} ->
+      :ok ->
         create_master_document()
         Mix.shell().info("Setup Complete!")
 
