@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.Ecto.Setup.Arango do
   use Mix.Task
-  import Mix.EctoAQL, only: [system_db: 0]
+  import Mix.EctoAQL
 
   @shortdoc "Sets up all necessary collections in _systems db for migrations "
 
@@ -10,13 +10,13 @@ defmodule Mix.Tasks.Ecto.Setup.Arango do
 
     {:ok, conn} = system_db()
 
-    case Arangox.post(conn, "/_api/collection", %{
-           type: 2,
-           name: "migrations"
-         }) do
-      {:ok, _, _} -> Mix.shell().info("Setup Complete!")
-      {:error, %{status: 409}} -> Mix.shell().info("Looks like you're already all set up!")
-      {:error, error} -> Mix.shell().error("Something is not right 🤔, #{inspect(error)}")
+    case create_migrations() do
+      {:ok, _, _} ->
+        :ok = create_master_document()
+        Mix.shell().info("Setup Complete!")
+
+      {:error, 409} ->
+        Mix.shell().info("Looks like you're already all set up!")
     end
   end
 end
