@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Ecto.Setup do
+defmodule Mix.Tasks.Ecto.Setup.Arango do
   use Mix.Task
   import Mix.EctoAQL, only: [system_db: 0]
 
