@@ -8,8 +8,6 @@ defmodule Mix.Tasks.Ecto.Setup.Arango do
   def run(_args) do
     Mix.Task.run("app.start")
 
-    {:ok, conn} = system_db()
-
     case create_migrations() do
       {:ok, _, _} ->
         :ok = create_master_document()
