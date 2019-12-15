@@ -35,8 +35,6 @@ defmodule Mix.EctoAQL do
           _key: "MASTER", migrations: []
         } INTO migrations
       """)
-
-    :ok
   end
 
   def migrated_versions do

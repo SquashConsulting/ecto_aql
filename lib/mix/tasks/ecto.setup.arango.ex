@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Ecto.Setup.Arango do
 
     case create_migrations() do
       {:ok, _, _} ->
-        :ok = create_master_document()
+        create_master_document()
         Mix.shell().info("Setup Complete!")
 
       {:error, 409} ->
