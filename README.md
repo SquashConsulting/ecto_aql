@@ -29,9 +29,8 @@ Inside `<YOUR-PHOENIX-PROJECT>/priv/repo/migrations/.formatter.exs` add `ecto_aq
 Inside `<YOUR-PHOENIX-PROJECT>/lib/hopper/repo.ex` replace the default `use` macro with:
 
 ```elixir
-use Ecto.Repo,
-    use EctoAQL.Repo,
-    otp_app: :the_name_of_your_app
+use EctoAQL.Repo,
+  otp_app: :the_name_of_your_app
 ```
 
 ### Step 4:
@@ -41,6 +40,7 @@ Run ArangoDB on http://localhost:8529 and create a database.
 Inside `<YOUR-PHOENIX-PROJECT>/config/dev.exs` replace the default `Repo` config with:
 
 ```elixir
+config :your_otp_app, YourApp.Repo,
   pool_size: 10,
   database: "name_of_the_database",
   show_sensitive_data_on_connection_error: true
@@ -52,6 +52,7 @@ Inside `<YOUR-PHOENIX-PROJECT>/config/dev.exs` replace the default `Repo` config
 
 ```bash
 $ mix ecto.setup.arango
+
 Setup Complete!
 ```
 
@@ -63,6 +64,7 @@ To generate migrations run:
 
 ```bash
 $ mix ecto.gen.migration create_users
+
 * creating priv/repo/migrations/20200114155636_create_users.exs
 ```
 
@@ -91,6 +93,7 @@ To run the migration run:
 
 ```bash
 $ mix ecto.migrate # or mix ecto.migrate up
+
 Successfully Migrated 20200114155636_create_users.exs
 ```
 
@@ -98,5 +101,6 @@ To rollback run:
 
 ```bash
 $ mix ecto.migrate rollback
+
 Successfully Rolled Back 20200114155636
 ```
