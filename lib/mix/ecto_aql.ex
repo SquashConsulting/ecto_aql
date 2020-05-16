@@ -6,6 +6,22 @@ defmodule Mix.EctoAQL do
     Path.join(Mix.Project.deps_paths()[app] || File.cwd!(), "priv/repo")
   end
 
+  defp get_default_repo! do
+    repo = Mix.Ecto.parse_repo([]) |> List.first
+
+    if repo == nil do
+      raise "No Default Repo Found"
+    end
+    repo
+  end
+
+  def config(opts \\ []) do
+    case Keyword.fetch(get_default_repo!().config(), :endpoints) do
+      {:ok, endpoints} -> [endpoints: endpoints] |> Keyword.merge(opts)
+      :error -> [endpoints: "http://localhost:8529"] |> Keyword.merge(opts)
+    end
+  end
+
   def timestamp do
     {{y, m, d}, {hh, mm, ss}} = :calendar.universal_time()
     "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss)}"
@@ -79,11 +95,10 @@ defmodule Mix.EctoAQL do
   end
 
   defp system_db do
-    options = [
+    options = config([
       pool_size: 1,
-      database: "_system",
-      endpoints: "http://localhost:8529"
-    ]
+      database: "_system"
+    ])
 
     Arangox.start_link(options)
   end

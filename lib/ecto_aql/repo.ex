@@ -167,11 +167,10 @@ defmodule EctoAQL.Repo do
       defp collection_type(:edge), do: 3
 
       defp system_db do
-        options = [
+        options = config([
           pool_size: 1,
-          database: "_system",
-          endpoints: "http://localhost:8529"
-        ]
+          database: "_system"
+        ])
 
         Arangox.start_link(options)
       end
